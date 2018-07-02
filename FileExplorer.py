@@ -1,11 +1,21 @@
 import time
 import os
 from pathlib import Path
+from platform import system
+
+__SYSTEM__ = 'Windows'
+
+
+def clear():
+    if __SYSTEM__ == 'Windows':
+        os.system('cls')
+    elif __SYSTEM__ == 'Darwin':
+        os.system('clear')
 
 
 class Explorer:
     def __init__(self):
-        self.path = str(Path.home()) + '\\Desktop'
+        self.path = str(Path.home()) + os.sep + 'Desktop'
         self.dirs = os.listdir(self.path)
 
     def dir_to_list(self):
@@ -15,11 +25,11 @@ class Explorer:
             except PermissionError:
                 print('You don\'t have permission to enter this directory')
                 time.sleep(2)
-                os.system('cls')
+                clear()
                 self.retrack()
                 self.dir_to_list()
             for d in self.dirs:
-                if os.path.isdir(self.path + '\\' + d):
+                if os.path.isdir(self.path + os.sep + d):
                     print('>./', end='')
                 else:
                     print('>  ', end='')
@@ -27,16 +37,16 @@ class Explorer:
         else:
             print('Open File not implemented yet')
             time.sleep(1)
-            os.system('cls')
+            clear()
             self.retrack()
             self.dir_to_list()
 
     def append(self, directory):
-        self.path += '\\'
+        self.path += os.sep
         self.path += directory
 
     def retrack(self):
-        self.path = self.path[:self.path.rfind('\\')]
+        self.path = self.path[:self.path.rfind(os.sep)]
         if len(self.path) == 2:
             self.append('')
 
@@ -57,7 +67,7 @@ class Explorer:
             self.append(found[0])
         else:
             for f in found:
-                if os.path.isdir(self.path + '\\' + f):
+                if os.path.isdir(self.path + os.sep + f):
                     print('./' + f)
 
             return False
@@ -65,17 +75,20 @@ class Explorer:
 
 
 if __name__ == '__main__':
-
-    explorer = Explorer()
-    newpath = ''
-    while newpath.lower() != 'exit':
-        pr = True
-        os.system('cls')
-        if newpath == '..':
-            explorer.retrack()
-        elif newpath != '':
-            pr = explorer.list_items(newpath)
-        if pr:
-            explorer.dir_to_list()
-        newpath = input(explorer.path + '>')
-    os.system('cls')
+    __SYSTEM__ = system()
+    if __SYSTEM__ == 'Windows':
+        explorer = Explorer()
+        newpath = ''
+        while newpath.lower() != 'exit':
+            pr = True
+            clear()
+            if newpath == '..':
+                explorer.retrack()
+            elif newpath != '':
+                pr = explorer.list_items(newpath)
+            if pr:
+                explorer.dir_to_list()
+            newpath = input(explorer.path + '>')
+            clear()
+    else:
+        print('Systems other than Windows are not implemented, yet')
