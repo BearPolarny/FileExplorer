@@ -76,19 +76,16 @@ class Explorer:
 
 if __name__ == '__main__':
     __SYSTEM__ = system()
-    if __SYSTEM__ == 'Windows':
-        explorer = Explorer()
-        newpath = ''
-        while newpath.lower() != 'exit':
-            pr = True
-            clear()
-            if newpath == '..':
-                explorer.retrack()
-            elif newpath != '':
-                pr = explorer.list_items(newpath)
-            if pr:
-                explorer.dir_to_list()
-            newpath = input(explorer.path + '>')
-            clear()
-    else:
-        print('Systems other than Windows are not implemented, yet')
+    explorer = Explorer()
+    newpath = ''
+    while newpath.lower() != 'exit':
+        pr = True
+        clear()
+        if newpath == '..':
+            explorer.retrack()
+        elif newpath != '':
+            pr = explorer.list_items(newpath)
+        if pr:
+            explorer.dir_to_list()
+        newpath = input(explorer.path + '>')
+        clear()
