@@ -3,13 +3,14 @@ import os
 from pathlib import Path
 from platform import system
 
-__SYSTEM__ = 'Windows'
-
+__MAC__ = 'Darwin'
+__WINDOWS__ = 'Windows'
+__SYSTEM__ = __WINDOWS__
 
 def clear():
-    if __SYSTEM__ == 'Windows':
+    if __SYSTEM__ == __WINDOWS__:
         os.system('cls')
-    elif __SYSTEM__ == 'Darwin':
+    elif __SYSTEM__ == __MAC__:
         os.system('clear')
 
 
@@ -34,12 +35,16 @@ class Explorer:
                 else:
                     print('>  ', end='')
                 print(d)
-        else:
+        elif os.path.isfile(self.path):
             print('Open File not implemented yet')
             time.sleep(1)
             clear()
             self.retrack()
             self.dir_to_list()
+        else:
+            print('Something went Wrong...', end=' ')
+            if __SYSTEM__ == __MAC__:
+                print("You are probably on Mac, aren't you?")
 
     def append(self, directory):
         self.path += os.sep
